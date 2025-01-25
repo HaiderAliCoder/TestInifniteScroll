@@ -1,8 +1,18 @@
 ﻿@model IEnumerable<TestInifniteScroll.Models.Item>
-
 @foreach (var item in Model)
 {
     <div class="item">
         <h3>@item.Name</h3>
+
+        <!-- Edit button with the item's Id passed to the 'Edit' action -->
+        <a href="@Url.Action("Edit", "Items", new { id = item.Id })" class="btn btn-warning">Edit</a>
+
+        <!-- Details button with the item's Id passed to the 'Details' action -->
+        <a href="@Url.Action("Details", "Items", new { id = item.Id })" class="btn btn-info">Details</a>
+
+        <!-- Delete button (using a form to POST the delete request) -->
+        <a href="@Url.Action("Delete", "Items", new { id = item.Id })" class="btn btn-outline-danger" method="post" style="display:inline;">
+            Delete
+        </a>
     </div>
 }
