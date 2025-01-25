@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Infinite Scroll";
+}
+
+<h2>Infinite Scroll</h2>
+<div id="item-container"></div>
+<div id="loading" style="display: none;">Loading...</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let offset = 0;
+    const pageSize = 16;
+    let isLoading = false;
+
+    function loadItems() {
+        if (isLoading) return;
+        isLoading = true;
+        $('#loading').show();
+
+        $.get('/Items/LoadItems', { offset, pageSize }, function (data) {
+            if (data.trim() !== '') {
+                $('#item-container').append(data);
+                offset += pageSize;
+                isLoading = false;
+                $('#loading').hide();
+            } else {
+                $('#loading').text('No more items to load.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadItems();  // Initial load
+
+        $(window).scroll(function () {
+            // Check if we are near the bottom of the page
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadItems();
+            }
+        });
+    });
+</script>
